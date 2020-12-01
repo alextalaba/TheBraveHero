@@ -49,6 +49,12 @@ function playMusic() {
   musicOn = true;
 }
 
+function onLoad() {
+  $(document).ready(function () {
+    $("#startingModal").modal("show");
+  });
+}
+
 //Main code
 
 function Start() {
@@ -217,7 +223,8 @@ class Battle {
       default:
         break;
     }
-    $("#endGameModal").modal("show");
+    // $("#endGameModal").modal("show");
+    document.getElementById("endGameModal").show = true;
   }
 }
 

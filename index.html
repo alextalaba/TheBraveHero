@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>The Brave Hero</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
+    <script type="text/javascript" src="index.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+    <script>$(document).ready(function () {
+            $("#startingModal").modal('show');
+        });</script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <style>
+        html {
+            height: 100%;
+        }
+
+        body {
+            background-image: url('./Img/bgbg.jpg');
+            background-repeat: repeat;
+            background-size: cover;
+            background-size: 50% 100%;
+        }
+
+        .battleGround {
+            background-image: url('./Img/bg.jpg');
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-size: 100% 100%;
+        }
+    </style>
+</head>
+
+<body class="py-5">
+    <!-- Starting Modal-->
+    <div id="startingModal" class="modal fade" data-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header text-center">
+                    <h5 class="modal-title text-center">The Brave Hero</h5>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p>Prepare for the ultimate battle as Carl is challanged by a vicious beast.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Game Modal-->
+    <div id="endGameModal" class="modal fade" data-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header text-center">
+                    <h5 class="modal-title text-center" id="winnerTitle">YOU WON</h5>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p id="winnerText">
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Battle Scene-->
+    <div class="container mx-auto py-5 border border-dark rounded battleGround">
+        <div class='row align-items-center'>
+            <div class="col-md">
+                <div class="container text-white p-3 mx-auto my-5 rounded" id="0"
+                    style="background: rgba(108,117,125, 0.7);">
+                </div>
+            </div>
+            <div class="col-md">
+                <img src="./Img/Carl.png" class="img-fluid mh-100" alt="Responsive image">
+            </div>
+            <div class="col-md">
+                <img src="./Img/Monster.png" class="img-fluid mh-100" alt="Responsive image">
+            </div>
+            <div class="col-md justify-content-center">
+                <div class="container text-white p-3 mx-auto my-5 rounded" id="1"
+                    style="background: rgba(108,117,125, 0.7);">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Buttons-->
+    <div class='container mx-auto row text-center my-2 '>
+        <div class="col-md text-center">
+            <button type="button" id="fight" class="btn btn-dark w-100" disabled
+                onclick="Battle.fight()">FIGHT!</button>
+        </div>
+        <div class="col-md text-center align-items-center">
+            <button type="button" id="start" class="btn btn-dark w-100" onclick="Start()">START</button>
+        </div>
+    </div>
+    <!--Battle Log-->
+    <div id="battleLog" class="container bg-dark text-light mx-auto py-2 border border-dark rounded overflow-auto"
+        style="max-height: 15vh; height: 15vh;">
+        Prepare for battle!
+    </div>
+</body>
+
+</html>

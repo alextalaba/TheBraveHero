@@ -217,8 +217,7 @@ class Battle {
       default:
         break;
     }
-    // $("#endGameModal").modal("show");
-    document.getElementById("endGameModal").show = true;
+    $("#endGameModal").modal("show");
   }
 }
 

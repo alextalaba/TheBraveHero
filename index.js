@@ -1,3 +1,5 @@
+let maxTurn = 20;
+
 // Carl Stats
 
 // Health
@@ -16,34 +18,43 @@ let carlMaxSpeed = 50;
 let carlMinLuck = 10;
 let carlMaxLuck = 30;
 
-// Monster Stats
+// Beast Stats
 
 // Health
-let monsterMinHealth = 55;
-let monsterMaxHealth = 80;
+let beastMinHealth = 55;
+let beastMaxHealth = 80;
 // Power
-let monsterMinPower = 50;
-let monsterMaxPower = 80;
+let beastMinPower = 50;
+let beastMaxPower = 80;
 // Defence
-let monsterMinDefence = 35;
-let monsterMaxDefence = 55;
+let beastMinDefence = 35;
+let beastMaxDefence = 55;
 // Speed
-let monsterMinSpeed = 40;
-let monsterMaxSpeed = 60;
+let beastMinSpeed = 40;
+let beastMaxSpeed = 60;
 // Luck
-let monsterMinLuck = 25;
-let monsterMaxLuck = 40;
+let beastMinLuck = 25;
+let beastMaxLuck = 40;
+
+let musicOn = false;
+// Start music
+function playMusic() {
+  if (!musicOn) {
+    let x = document.createElement("AUDIO");
+    x.setAttribute("src", "./Sounds/Redemption.mp3");
+    x.setAttribute("autoplay", "autoplay");
+    x.setAttribute("loop", "loop");
+    document.body.appendChild(x);
+  }
+  musicOn = true;
+}
 
 //Main code
 
 function Start() {
-  let x = document.createElement("AUDIO");
-  x.setAttribute("src", "./Sounds/Redemption.mp3");
-  x.setAttribute("autoplay", "autoplay");
-  x.setAttribute("loop", "loop");
-  document.body.appendChild(x);
+  playMusic();
 
-  // Abilities
+  // Abilities (abilities[0]=offensive abilities, abilities[1]=deffensive abilities)
   let basicAttack = new Ability("Basic Attack", 100, "power", 0, 1, true);
   let dragonForce = new Ability("Dragon Force", 10, "power", 0, 2, false);
   let defend = new Ability("Defend", 100, "defence", -1, 1, false);
@@ -54,7 +65,7 @@ function Start() {
     [defend, charmedShield],
   ];
 
-  this.Carl = new Character(
+  Carl = new Character(
     0,
     "Carl",
     Math.round(getRandomBetween(carlMinHealth, carlMaxHealth)),
@@ -65,20 +76,20 @@ function Start() {
     carlAbilities
   );
 
-  let monsterAbilities = [[basicAttack], [defend]];
+  let beastAbilities = [[basicAttack], [defend]];
 
-  this.Monster = new Character(
+  Beast = new Character(
     1,
     "Beast",
-    Math.round(getRandomBetween(monsterMinHealth, monsterMaxHealth)),
-    Math.round(getRandomBetween(monsterMinPower, monsterMaxPower)),
-    Math.round(getRandomBetween(monsterMinDefence, monsterMaxDefence)),
-    Math.round(getRandomBetween(monsterMinSpeed, monsterMaxSpeed)),
-    Math.round(getRandomBetween(monsterMinLuck, monsterMaxLuck)),
-    monsterAbilities
+    Math.round(getRandomBetween(beastMinHealth, beastMaxHealth)),
+    Math.round(getRandomBetween(beastMinPower, beastMaxPower)),
+    Math.round(getRandomBetween(beastMinDefence, beastMaxDefence)),
+    Math.round(getRandomBetween(beastMinSpeed, beastMaxSpeed)),
+    Math.round(getRandomBetween(beastMinLuck, beastMaxLuck)),
+    beastAbilities
   );
 
-  Battle.setCharacters(Carl, Monster);
+  Battle.setCharacters(Carl, Beast);
 
   Battle.initialize();
 }
@@ -135,58 +146,77 @@ class Battle {
     }
   }
 
-  static fight() {
+  static nextTurn() {
     document.getElementById("fight").disabled = true;
-
     this.turn++;
+
     Log.logTurn();
 
-    if (this.heroFirst) {
-      if (this.Hero.alive)
-        setTimeout(() => {
-          let damage = this.Hero.power;
-          this.Hero.attack(this.Monster, damage);
-          this.Monster.displayStats();
-
-          if (this.Monster.alive)
-            setTimeout(() => {
-              let damage = this.Monster.power;
-              this.Monster.attack(this.Hero, damage);
-              this.Hero.displayStats();
-
-              document.getElementById("fight").disabled = !(
-                this.Hero.alive && this.Monster.alive
-              );
-            }, 1000);
-        }, 1000);
+    if (this.turn > maxTurn) {
+      this.declareWinner(this.Hero.health >= this.Monster.health ? 3 : 4);
     } else {
-      if (this.Monster.alive)
-        setTimeout(() => {
-          let damage = this.Monster.power;
-          this.Monster.attack(this.Hero, damage);
-          this.Hero.displayStats();
-
-          if (this.Hero.alive)
-            setTimeout(() => {
-              let damage = this.Hero.power;
-              this.Hero.attack(this.Monster, damage);
-              this.Monster.displayStats();
-
-              document.getElementById("fight").disabled = !(
-                this.Hero.alive && this.Monster.alive
-              );
-            }, 1000);
-        }, 1000);
+      if (this.heroFirst) {
+        this.fight(this.Hero, this.Monster);
+      } else {
+        this.fight(this.Monster, this.Hero);
+      }
     }
+  }
+
+  static fight(first = new Character(), second = new Character()) {
+    if (first.alive)
+      setTimeout(() => {
+        let damage = first.power;
+        first.attack(second, damage);
+        second.displayStats();
+
+        if (second.alive)
+          setTimeout(() => {
+            let damage = second.power;
+            second.attack(first, damage);
+            first.displayStats();
+
+            document.getElementById("fight").disabled = !(
+              first.alive && second.alive
+            );
+          }, 1000);
+      }, 1000);
   }
 
   static declareWinner(winnerId = 0) {
     document.getElementById("winnerTitle").innerHTML =
-      winnerId === 0 ? "YOU WON" : "YOU LOST";
-    document.getElementById("winnerText").innerHTML =
-      winnerId === 0
-        ? "Carl proved once more that nothing can defeat him. Now go back home and enjoy peace another day."
-        : "Carl lost his life in battle. The Monster proved to be better. Or maybe there was something in the coffee...";
+      winnerId === 0 || winnerId === 3 ? "YOU WON" : "YOU LOST";
+
+    switch (winnerId) {
+      case 0:
+        document.getElementById("monsterImage").src =
+          "./Img/MonsterDefeated.png";
+        document.getElementById("winnerText").innerHTML =
+          "Carl proved once more that nothing can defeat him. Now go back home and enjoy peace another day.";
+        break;
+
+      case 1:
+        document.getElementById("carlImage").src = "./Img/CarlDefeated.png";
+        document.getElementById("winnerText").innerHTML =
+          "Carl lost his life in battle. The Monster proved to be better. Or maybe there was something in the coffee...";
+        break;
+
+      case 3:
+        document.getElementById("monsterImage").src =
+          "./Img/MonsterDefeated.png";
+        document.getElementById("winnerText").innerHTML =
+          "The exhausted monster trembled in front of Carl's might. It ran away in terror.";
+        break;
+
+      case 4:
+        document.getElementById("carlImage").src = "./Img/CarlDefeated.png";
+        document.getElementById("winnerText").innerHTML =
+          "Carl ran away back to his mother's place where he cried for 3.5 hours. Ah, the adventurer's life!";
+        break;
+
+      default:
+        break;
+    }
     $("#endGameModal").modal("show");
   }
 }
@@ -263,9 +293,10 @@ class Character {
 
       if (target.health <= 0) {
         target.alive = false;
+
         Log.logInfo(target.name + " died in combat.");
         document.getElementById("fight").disabled = true;
-        console.log(this.id);
+
         Battle.declareWinner(this.id);
       }
     } else {
@@ -280,23 +311,23 @@ class Character {
   displayStats() {
     document.getElementById(this.id).innerHTML =
       "<div class='row'>" +
-      "<div class='col-md text-center'>" +
+      "<div class='col-md text-center'><h4>" +
       this.name +
-      "</div></div><div class='row'><div class='col-md'>Health: </div><div class='col-md text-right'>" +
+      "</h4></div></div><div class='row'><div class='col-md'><h5>Health: </h5></div><div class='col-md text-right'><h5>" +
       this.health +
-      "</div></div>" +
-      "</div><div class='row'><div class='col-md'>Power: </div><div class='col-md text-right'>" +
+      "</h5></div></div>" +
+      "</div><div class='row'><div class='col-md'><h5>Power: </h5></div><div class='col-md text-right'><h5>" +
       this.power +
-      "</div></div>" +
-      "</div><div class='row'><div class='col-md'>Defence: </div><div class='col-md text-right'>" +
+      "</h5></div></div>" +
+      "</div><div class='row'><div class='col-md'><h5>Defence: </h5></div><div class='col-md text-right'><h5>" +
       this.defence +
-      "</div></div>" +
-      "</div><div class='row'><div class='col-md'>Speed: </div><div class='col-md text-right'>" +
+      "</h5></div></div>" +
+      "</div><div class='row'><div class='col-md'><h5>Speed: </h5></div><div class='col-md text-right'><h5>" +
       this.speed +
-      "</div></div>" +
-      "</div><div class='row'><div class='col-md'>Luck: </div><div class='col-md text-right'>" +
+      "</h4></div></div>" +
+      "</div><div class='row'><div class='col-md'><h5>Luck: </h5></div><div class='col-md text-right'><h5>" +
       this.luck +
-      "%</div></div>";
+      "%</h5></div></div>";
   }
 
   getStat(stat) {
@@ -403,14 +434,23 @@ class Log {
       deffensiveAbilities +
       "<br><br>";
     document.getElementById("battleLog").innerHTML = Battle.log;
+    this.scrollLog();
   }
 
   static logTurn() {
     Battle.log += "<br>TURN " + Battle.turn + "<br>";
     document.getElementById("battleLog").innerHTML = Battle.log;
+    this.scrollLog();
   }
+
   static logInfo(info) {
     Battle.log += info + "<br>";
     document.getElementById("battleLog").innerHTML = Battle.log;
+    this.scrollLog();
+  }
+
+  static scrollLog() {
+    var log = document.getElementById("battleLog");
+    log.scrollTop = log.scrollHeight;
   }
 }

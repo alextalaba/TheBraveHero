@@ -28,7 +28,7 @@
             background-image: url('./Img/bgbg.jpg');
             background-repeat: repeat;
             background-size: cover;
-            background-size: 50% 100%;
+            background-size: 40% 100%;
         }
 
         .battleGround {
@@ -79,10 +79,10 @@
                 </div>
             </div>
             <div class="col-md">
-                <img src="./Img/Carl.png" class="img-fluid mh-100" alt="Responsive image">
+                <img id="carlImage" src="./Img/Carl.png" class="img-fluid mh-100" alt="Responsive image">
             </div>
             <div class="col-md">
-                <img src="./Img/Monster.png" class="img-fluid mh-100" alt="Responsive image">
+                <img id="monsterImage" src="./Img/Monster.png" class="img-fluid mh-100" alt="Responsive image">
             </div>
             <div class="col-md justify-content-center">
                 <div class="container text-white p-3 mx-auto my-5 rounded" id="1"
@@ -94,8 +94,8 @@
     <!--Buttons-->
     <div class='container mx-auto row text-center my-2 '>
         <div class="col-md text-center">
-            <button type="button" id="fight" class="btn btn-dark w-100" disabled
-                onclick="Battle.fight()">FIGHT!</button>
+            <button type="button" id="fight" class="btn btn-dark w-100" disabled onclick="Battle.nextTurn()">NEXT
+                TURN!</button>
         </div>
         <div class="col-md text-center align-items-center">
             <button type="button" id="start" class="btn btn-dark w-100" onclick="Start()">START</button>

@@ -108,6 +108,8 @@ class Battle {
   // Prepare battle
   static initialize() {
     document.getElementById("start").innerHTML = "RESTART";
+    document.getElementById("carlImage").src = "./Img/Carl.png";
+    document.getElementById("monsterImage").src = "./Img/Monster.png";
 
     this.turn = 0;
     this.log = "";

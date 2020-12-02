@@ -108,8 +108,6 @@ class Battle {
   // Prepare battle
   static initialize() {
     document.getElementById("start").innerHTML = "RESTART";
-    document.getElementById("carlImage").src = "./Img/Carl.png";
-    document.getElementById("monsterImage").src = "./Img/Monster.png";
 
     this.turn = 0;
     this.log = "";
@@ -127,6 +125,9 @@ class Battle {
   static setCharacters(hero, monster) {
     this.Hero = hero;
     this.Monster = monster;
+
+    document.getElementById("carlImage").src = "./Img/Carl.png";
+    document.getElementById("monsterImage").src = "./Img/Monster.png";
   }
 
   // Set starting character
